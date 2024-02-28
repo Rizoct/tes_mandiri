@@ -34,7 +34,7 @@ class MovieActivity : AppCompatActivity() {
         val author: String,
         val content: String,
         val url: String,
-        val rating: Int,
+        val rating: Int?,
     )
 
 
@@ -105,11 +105,12 @@ class MovieActivity : AppCompatActivity() {
                     for (i in 0 until jsonArray.length()) {
                         val reviewObject = jsonArray.getJSONObject(i)
                         val authorDetailsObject = reviewObject.getJSONObject("author_details")
+                        val rating = if (!authorDetailsObject.isNull("rating")) authorDetailsObject.getInt("rating") else null
                         val review = Review(
                             reviewObject.getString("author"),
                             reviewObject.getString("content"),
                             reviewObject.getString("url"),
-                            authorDetailsObject.getInt("rating")
+                            rating
                         )
                         reviews.add(review)
                     }
@@ -119,7 +120,7 @@ class MovieActivity : AppCompatActivity() {
                         val reviewsLayout = findViewById<LinearLayout>(R.id.reviewsLayout)
                         for (review in reviews) {
                             val reviewTextView = TextView(this)
-                            reviewTextView.text = "${review.author} | ${review.rating}\n----------------------------------\n${review.content}"
+                            reviewTextView.text = "${review.author} | ${review.rating ?: "No rating"}\n----------------------------------\n${review.content}"
                             reviewsLayout.addView(reviewTextView)
                         }
                     }
