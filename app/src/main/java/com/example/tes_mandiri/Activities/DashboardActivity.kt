@@ -106,6 +106,8 @@ class DashboardActivity : AppCompatActivity() {
             holder.textView.setOnClickListener {
                 val intent = Intent(context, GenreActivity::class.java)
                 intent.putExtra("genre_name", genre.name)
+                intent.putExtra("genre_id", genre.id)
+                //print("GENREEEEEE ${genre.id}" );
                 context.startActivity(intent)
             }
         }
