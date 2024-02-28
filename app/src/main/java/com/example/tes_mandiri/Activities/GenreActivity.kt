@@ -1,6 +1,7 @@
 package com.example.tes_mandiri.Activities
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -91,7 +92,7 @@ data class Movie(
     val title: String
 )
 
-class MovieAdapter(private val movies: List<Movie>, private val context: Context) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val movies: MutableList<Movie>, private val context: Context) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -104,6 +105,7 @@ class MovieAdapter(private val movies: List<Movie>, private val context: Context
         val movie = movies[position]
         holder.view.findViewById<TextView>(R.id.movie_title).text = movie.title
 
+        val titleView = holder.view.findViewById<TextView>(R.id.movie_title)
         val imageView = holder.view.findViewById<ImageView>(R.id.movie_poster)
         val progressBar = holder.view.findViewById<ProgressBar>(R.id.progress_bar)
 
@@ -124,6 +126,18 @@ class MovieAdapter(private val movies: List<Movie>, private val context: Context
                 }
             })
             .into(imageView)
+
+            val clickListener = View.OnClickListener {
+                val intent = Intent(holder.view.context, MovieActivity::class.java)
+                intent.putExtra("movie_id", movie.id.toString())
+                intent.putExtra("movie_title", movie.original_title.toString())
+
+
+                holder.view.context.startActivity(intent)
+            }
+
+            imageView.setOnClickListener(clickListener)
+            titleView.setOnClickListener(clickListener)
     }
 
     override fun getItemCount() = movies.size
